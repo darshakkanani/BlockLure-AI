@@ -1,0 +1,126 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: honeyport-core-service
+  namespace: honeyport
+  labels:
+    app: honeyport-core
+spec:
+  type: NodePort
+  ports:
+  - port: 2222
+    targetPort: 2222
+    nodePort: 30222
+    name: ssh
+  - port: 8080
+    targetPort: 8080
+    nodePort: 30080
+    name: http
+  - port: 3389
+    targetPort: 3389
+    nodePort: 30389
+    name: rdp
+  - port: 3306
+    targetPort: 3306
+    nodePort: 30306
+    name: mysql
+  selector:
+    app: honeyport-core
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard-backend-service
+  namespace: honeyport
+  labels:
+    app: dashboard-backend
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5000
+    targetPort: 5000
+    name: api
+  selector:
+    app: dashboard-backend
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard-frontend-service
+  namespace: honeyport
+  labels:
+    app: dashboard-frontend
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+    name: web
+  selector:
+    app: dashboard-frontend
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: honeyport-config
+  namespace: honeyport
+data:
+  config.yaml: |
+    honeypot:
+      bind_ip: "0.0.0.0"
+      services:
+        ssh:
+          enabled: true
+          port: 2222
+          banner: "SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.1"
+        http:
+          enabled: true
+          port: 8080
+          server_name: "Apache/2.4.41 (Ubuntu)"
+        rdp:
+          enabled: true
+          port: 3389
+        mysql:
+          enabled: true
+          port: 3306
+          version: "8.0.33"
+    logging:
+      level: "INFO"
+      file: "/app/data/logs/honeyport.log"
+      max_size: "10MB"
+      backup_count: 5
+    database:
+      type: "sqlite"
+      path: "/app/data/attacks.db"
+    geolocation:
+      enabled: true
+      maxmind_db: "/app/data/GeoLite2-City.mmdb"
+    firewall:
+      enabled: true
+      auto_block: true
+      block_duration: 3600
+      whitelist:
+        - "127.0.0.1"
+        - "10.0.0.0/8"
+        - "172.16.0.0/12"
+        - "192.168.0.0/16"
+    dashboard:
+      enabled: true
+      host: "0.0.0.0"
+      port: 5000
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: honeyport-data-pvc
+  namespace: honeyport
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  # Honeypot Core Service
+  honeyport-core:
+    build:
+      context: ../honeyport-core
+      dockerfile: Dockerfile
+    container_name: honeyport-core
+    restart: unless-stopped
+    network_mode: host
+    privileged: true  # Required for firewall operations
+    volumes:
+      - ../data:/app/data
+      - ../honeyport-core/config.yaml:/app/config.yaml
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - postgres
+    command: python honeyport.py
+
+  # Dashboard Backend
+  dashboard-backend:
+    build:
+      context: ../dashboard/backend
+      dockerfile: Dockerfile
+    container_name: dashboard-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - ../data:/app/data
+    environment:
+      - FLASK_ENV=production
+      - DATABASE_PATH=/app/data/attacks.db
+    depends_on:
+      - postgres
+
+  # Dashboard Frontend
+  dashboard-frontend:
+    build:
+      context: ../dashboard/frontend
+      dockerfile: Dockerfile
+    container_name: dashboard-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - dashboard-backend
+
+  # PostgreSQL Database (Alternative to SQLite for production)
+  postgres:
+    image: postgres:15-alpine
+    container_name: honeyport-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: honeyport
+      POSTGRES_USER: honeyport
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-honeyport123}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: honeyport-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/honeyport.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - dashboard-frontend
+      - dashboard-backend
+
+  # Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    container_name: honeyport-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  default:
+    name: honeyport-network
