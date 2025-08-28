@@ -1,2 +1,0 @@
-220 mail.example.com ESMTP Postfix (Ubuntu)
-220 Ready to start TLS

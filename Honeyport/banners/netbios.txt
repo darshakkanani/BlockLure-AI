@@ -1,2 +1,0 @@
-NetBIOS Name Service
-Windows Network Name Resolution

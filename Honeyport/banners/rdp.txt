@@ -1,2 +1,0 @@
-Remote Desktop Protocol Server
-Windows Server 2019 Standard
