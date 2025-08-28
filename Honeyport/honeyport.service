@@ -1,0 +1,24 @@
+[Unit]
+Description=BlockLure AI Honeyport System
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/honeyport
+ExecStart=/usr/bin/python3 /opt/honeyport/honeyport.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Security settings
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/honeyport
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

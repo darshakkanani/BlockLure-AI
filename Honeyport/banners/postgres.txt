@@ -1,0 +1,2 @@
+PostgreSQL Database Server
+Version: PostgreSQL 13.7 on x86_64-pc-linux-gnu

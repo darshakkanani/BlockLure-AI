@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-08-28T11:25:01.655819",
+  "cellular_honeyport": true,
+  "tunnel_connection": true,
+  "attacker_identification": {
+    "source_ip": "127.0.0.1",
+    "tunnel_ip": "127.0.0.1",
+    "source_port": 64597,
+    "geolocation": {
+      "country": "Local Network",
+      "city": "Local",
+      "region": "Local",
+      "isp": "Local Network",
+      "asn": "Local",
+      "timezone": "Local",
+      "lat": 0,
+      "lon": 0,
+      "threat_level": "LOW"
+    }
+  },
+  "connection_info": {
+    "target_port": 2222,
+    "protocol": "SSH",
+    "bytes_transferred": 0
+  },
+  "attack_analysis": {
+    "detected_tools": [],
+    "payload": "",
+    "payload_size": 0
+  },
+  "threat_assessment": {
+    "threat_level": "MEDIUM",
+    "attack_vector": "Internet tunnel",
+    "discovery_method": "ngrok tunnel scanning"
+  }
+}

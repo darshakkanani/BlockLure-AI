@@ -1,0 +1,59 @@
+{
+  "timestamp": "2025-08-28T11:24:38.162783",
+  "cellular_network": true,
+  "public_tunnels": {
+    "2222": "tcp://0.tcp.in.ngrok.io:15885",
+    "2323": "tcp://0.tcp.in.ngrok.io:15440",
+    "8080": "https://0e18ffc02a2e.ngrok-free.app",
+    "8443": "tcp://0.tcp.in.ngrok.io:17574",
+    "2121": "tcp://0.tcp.in.ngrok.io:10694",
+    "2525": "tcp://0.tcp.in.ngrok.io:16312",
+    "3306": "tcp://0.tcp.in.ngrok.io:12998",
+    "5432": "tcp://0.tcp.in.ngrok.io:19479",
+    "1433": "tcp://0.tcp.in.ngrok.io:17732",
+    "3389": "tcp://0.tcp.in.ngrok.io:10113",
+    "4445": "tcp://0.tcp.in.ngrok.io:10151",
+    "1135": "tcp://0.tcp.in.ngrok.io:16914",
+    "1139": "tcp://0.tcp.in.ngrok.io:10926"
+  },
+  "attack_surfaces": [
+    2222,
+    2323,
+    8080,
+    8443,
+    2121,
+    2525,
+    3306,
+    5432,
+    1433,
+    3389,
+    4445,
+    1135,
+    1139
+  ],
+  "discovery_methods": [
+    "ngrok tunnel scanning",
+    "subdomain enumeration",
+    "tunnel URL discovery",
+    "automated security scans"
+  ],
+  "target_services": {
+    "ssh": [
+      "tcp://0.tcp.in.ngrok.io:15885"
+    ],
+    "web": [
+      "https://0e18ffc02a2e.ngrok-free.app"
+    ],
+    "database": [
+      "tcp://0.tcp.in.ngrok.io:12998",
+      "tcp://0.tcp.in.ngrok.io:19479",
+      "tcp://0.tcp.in.ngrok.io:17732"
+    ],
+    "windows": [
+      "tcp://0.tcp.in.ngrok.io:10113",
+      "tcp://0.tcp.in.ngrok.io:10151",
+      "tcp://0.tcp.in.ngrok.io:16914",
+      "tcp://0.tcp.in.ngrok.io:10926"
+    ]
+  }
+}
